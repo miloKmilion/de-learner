@@ -108,3 +108,13 @@ docker run -it \
     --name=pg-database \
     postgres:latest
 ```
+
+### How to dockerize the ingestion Script
+
+If the script is in a Jupiter notebook it is possible to:
+
+```bash
+jupyter nbconvert --to=script
+```
+
+However for the script __ingest_data.py__ we can use either argparse or typer for 
