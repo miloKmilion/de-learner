@@ -117,4 +117,98 @@ If the script is in a Jupiter notebook it is possible to:
 jupyter nbconvert --to=script
 ```
 
-However for the script __ingest_data.py__ we can use either argparse or typer for 
+However for the script __ingest_data.py__ we can use either argparse or typer to create the input fields necessary for the script to run.
+
+Based on the structure of the project:
+
+```Dockerfile
+# Base image
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install uv
+RUN pip install uv
+
+# Copy project metadata from root into /app
+COPY pyproject.toml uv.lock ./
+
+# Install dependencies via uv
+RUN uv pip install -r uv.lock
+
+# Copy the module folder only
+COPY de_learner/ de_learner/
+
+# Set default command
+ENTRYPOINT ["uv", "run", "python", "de_learner/module01/2_docker_sql/ingest_data.py"]
+```
+
+to Build the image, it is necessary to be in the project root:
+
+```bash
+docker build -f de_learner/module01/2_docker_sql/Dockerfile -t ingest-script .
+
+# Running the container with params
+docker run ingest-script \
+    --url "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2021-01.parquet" \
+    --user root \
+    --password root \
+    --host host.docker.internal \
+    --port 5432 \
+    --db ny_taxi \
+    --table_name yellow_taxi_data \
+    --chunk_size 100000
+```
+
+### Connecting Postgres and pgAdmin using DockerCompose
+
+At this moment we have different docker commands running in different environments or terminals, also connected by the Docker-network.
+
+A way to make things run easier is to move those containers into a single file and running them all at once.
+
+> DockerCompose: Is a tool for defining and running multi-containers. Using YAML file to configure the application's services.
+
+```yaml
+version: '3.8'
+
+services:
+  pgdatabase:
+    image: postgres:latest
+    container_name: pg-database
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: ny_taxi
+    volumes:
+      - ./data/ny_taxi_postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - pg-network
+
+  pgadmin:
+    image: dpage/pgadmin4:snapshot
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "8080:80"
+    depends_on:
+      - pgdatabase
+    networks:
+      - pg-network
+
+networks:
+  pg-network:
+  ```
+
+  To run the yaml in a detach mode abnd shutting it down:
+
+  ```bash
+  docker-compose up -d
+
+  docker-compose down
+```
+
+

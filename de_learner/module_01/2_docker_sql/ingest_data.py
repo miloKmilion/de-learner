@@ -110,16 +110,20 @@ def ingest_parquet_to_postgresql(
 
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(description="Download and ingest Parquet data into PostgreSQL.")
 
-    parser.add_argument("--url", required=True, help="URL of the Parquet file")
-    parser.add_argument("--user", required=True, help="PostgreSQL username")
-    parser.add_argument("--password", required=True, help="PostgreSQL password")
+    parser.add_argument(
+        "--url",
+        default="https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2021-01.parquet",
+        required=True,
+        help="URL of the Parquet file",
+    )
+    parser.add_argument("--user", default="root", required=True, help="PostgreSQL username")
+    parser.add_argument("--password", default="root", required=True, help="PostgreSQL password")
     parser.add_argument("--host", default="localhost", help="PostgreSQL host (default: localhost)")
     parser.add_argument("--port", default="5432", help="PostgreSQL port (default: 5432)")
-    parser.add_argument("--db", required=True, help="PostgreSQL database name")
-    parser.add_argument("--table_name", required=True, help="Table name to ingest into")
+    parser.add_argument("--db", default="ny_taxi", required=True, help="PostgreSQL database name")
+    parser.add_argument("--table_name", default="yellow_taxi_data", required=True, help="Table name to ingest into")
     parser.add_argument("--chunk_size", type=int, default=100000, help="Chunk size for ingestion (default: 100000)")
 
     args = parser.parse_args()
