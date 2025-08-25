@@ -242,3 +242,134 @@ sso_role_name = AdministratorAccess
 region = eu-north-1
 output = json
 ```
+
+## Extensions
+
+From the widget panel, the terraform package has all the highlights and required syntax needed to complete and catch errors.
+
+## Main.tf
+
+This fail is the main entrypoint to our terraform service. It contains all the provider and services that we require to run our code.
+
+### Provider configuration
+
+```tf
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+  required_version = ">= 1.5.0"
+}
+
+provider "aws" {
+  region = "eu-north-1"   # change to your preferred region
+  profile = "terraform"   # this must match your AWS SSO profile in ~/.aws/config
+}
+```
+
+### GCP vs AWS: Project / Account Mapping
+
+* **GCP**
+
+  * All resources live inside a **Project** (identified by `project_id`).  
+  * The project defines **billing, IAM roles, and resource boundaries**.  
+
+* **AWS**  
+  * All resources live inside an **Account** (identified by a 12-digit `account_id`).  
+  * AWS doesn’t have a "project" object — the **account** is the main boundary for billing, IAM, and resources.  
+  * Resources are additionally scoped by **Region** (e.g., `eu-north-1`).  
+  * Terraform usually references a **profile** (from `~/.aws/config`) that contains credentials tied to that account.  
+
+✅ In practice:  
+
+* **GCP `project_id` ≈ AWS `account_id`**  
+* **GCP region/zone ≈ AWS region**
+
+### Terraform init
+
+This will read the providers information and create a set of extra files and folders such as the ```lock.hcl``` and the terraform subfolder will the provider hash. 
+
+### Adding a Bucket
+
+AWS behaves different to GCP. While in GCP we need to add a provider for the bucket creation in AWS it is not needed since everything is linked to the IAM role created before
+
+wWe can create the bucket directly in the AWS dashboard or:
+
+```main.tf
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+  required_version = ">= 1.5.0"
+}
+
+provider "aws" {
+  region  = "eu-north-1"   # Change to your preferred region
+  profile = "terraform"    # Must match your AWS SSO profile
+}
+
+# ------------------------
+# S3 Bucket
+# ------------------------
+resource "aws_s3_bucket" "data_lake_bucket" {
+  bucket = "data-lake-dev-milokmilo"  # Must be globally unique
+  force_destroy = true  # Allows bucket deletion even if objects exist
+
+  tags = {
+    Environment = "dev"
+    Project     = "de-learner"
+  }
+}
+
+# ------------------------
+# S3 Versioning (separate resource)
+# ------------------------
+resource "aws_s3_bucket_versioning" "data_lake_bucket_versioning" {
+  bucket = aws_s3_bucket.data_lake_bucket.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+# ------------------------
+# S3 Lifecycle Rules
+# ------------------------
+resource "aws_s3_bucket_lifecycle_configuration" "data_lake_bucket_lifecycle" {
+  bucket = aws_s3_bucket.data_lake_bucket.id
+
+  rule {
+    id     = "delete-old-objects"
+    status = "Enabled"
+
+    filter {}  # Applies to all objects
+
+    expiration {
+      days = 30
+    }
+
+    noncurrent_version_expiration {
+      noncurrent_days = 30
+    }
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 7
+    }
+  }
+}
+
+# ---------------------------
+# Athena database (BigQuery dataset equivalent)
+# ---------------------------
+resource "aws_athena_database" "dataset" {
+  name   = "demo_dataset"
+  bucket = aws_s3_bucket.data_lake_bucket.bucket
+}
+```
+
