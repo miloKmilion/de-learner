@@ -18,4 +18,5 @@ ADD . /app
 # Sync the project
 RUN uv sync --frozen
 
-CMD [ "python", "de_learner/foo.py"]
+# Default to running pytest, can be overridden at runtime
+CMD ["uv", "run", "pytest"]

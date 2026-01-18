@@ -2,7 +2,7 @@
 
 ## 1. Introduction to DOCKER
 
-What is docker? 
+What is docker?
 An application that delivers software in containers that are isolated from each other.
 
 Example a data pipeline will run in isolation, but what is a pipeline? It is a process service that ingest data to produce data. Or from source to destination.
@@ -15,24 +15,24 @@ A pipeline can be composed from different pipelines way smaller.
 
 ### How does it run?
 
-* A Host Computer (Win, Linux)
-  * Container in UBUNTU
-    * Python
-    * Pandas
-    * Postgres connection library
+- A Host Computer (Win, Linux)
+  - Container in UBUNTU
+    - Python
+    - Pandas
+    - Postgres connection library
 
- A host computer can have several containers, one for example containing the data pipeline steps and another with PostgresDB or different databases that will not interfere with each other.
+A host computer can have several containers, one for example containing the data pipeline steps and another with PostgresDB or different databases that will not interfere with each other.
 
 pgAdmin used to run SQL queries and be apart of the DB so the data is safe.
 
 ### Why is DOCKER needed?
 
-* Reproducibility
-* Local experiments
-* Testing and integration (CI/CD) -> Github Actions
-* Running pipelines on the cloud (AWS Batch, Kubernetes jobs)
-* Spark
-* Serverless (AWS lambda, Google Functions)
+- Reproducibility
+- Local experiments
+- Testing and integration (CI/CD) -> Github Actions
+- Running pipelines on the cloud (AWS Batch, Kubernetes jobs)
+- Spark
+- Serverless (AWS lambda, Google Functions)
 
 ### What is needed
 
@@ -64,9 +64,9 @@ This will run the basal container with a python image installed. However, when i
 
 This file is the starting point with the instructions needed to build an image container.
 
-The following is an excample of the basic dockerfile, in order to build the image we need to run ```docker build -t test:pandas .``` the name:tag is needed as well as the location (.)
+The following is an excample of the basic dockerfile, in order to build the image we need to run `docker build -t test:pandas .` the name:tag is needed as well as the location (.)
 
-To run the image after being built: ```docker run -it test:pandas```
+To run the image after being built: `docker run -it test:pandas`
 
 When a file or a script needs to be added to the docker image, it is necessary to copy the file from the host to the docker.
 

@@ -3,21 +3,21 @@
 The software focuses in cloud platform like GCP or AWS and sets the infrastructure needed for the code can live and software runs.
 
 > Definition:
-It is an infrastructure as code tool that lets you define both cloud and on-prem resources in human readable configuration files that you can version, reuse and share.
-You can then use a consistent workflow to provision and manage all of your infgrastructure throughout its lifecycle.
+> It is an infrastructure as code tool that lets you define both cloud and on-prem resources in human readable configuration files that you can version, reuse and share.
+> You can then use a consistent workflow to provision and manage all of your infgrastructure throughout its lifecycle.
 
 ## Why Terraform?
 
-* Keeps track of the infrastructure while keeping the simplicity of the process.
-* Easy collaboration, since is a file. It is easy to keep track of changes and the software development process.
-* Reproducibility, since we can create environments to modify the software before its release in production
-* Ensure resources are remove, since the it is easy to build and remove once the process is complete without expending extra resources.
+- Keeps track of the infrastructure while keeping the simplicity of the process.
+- Easy collaboration, since is a file. It is easy to keep track of changes and the software development process.
+- Reproducibility, since we can create environments to modify the software before its release in production
+- Ensure resources are remove, since the it is easy to build and remove once the process is complete without expending extra resources.
 
 ### Important
 
-* Terraform does not manage and update code on infrastructure.
-* Does not gives the ability to change immutable resources. Like modifying virtual machines, or buckets.
-* Not used to manage resources not defined in your terraform files.
+- Terraform does not manage and update code on infrastructure.
+- Does not gives the ability to change immutable resources. Like modifying virtual machines, or buckets.
+- Not used to manage resources not defined in your terraform files.
 
 ### Terraform map
 
@@ -37,10 +37,10 @@ Code that allows terraform to communicate to manage resources on:
 
 ### Key Terraform Commands
 
-* init: Get the providers needed.
-* plan: Will tell you what I do and the resources that will be created.
-* Apply: Do what is in the tf files. And build the tf space
-* Destroy: Remove everything defined in the tf files.
+- init: Get the providers needed.
+- plan: Will tell you what I do and the resources that will be created.
+- Apply: Do what is in the tf files. And build the tf space
+- Destroy: Remove everything defined in the tf files.
 
 ## Terraform Basics
 
@@ -92,33 +92,33 @@ For example, the user account has a series of permissions such as open a documen
 
 ### GCP Free Tier Highlights
 
-* **Cloud Functions**: 2M invocations/month free.
-* **Cloud Storage**: 5 GB/month free (US regions).
-* **BigQuery**: 1 TB query & 10 GB storage/month free.
-* **Firestore**: 50,000 reads/writes & 1 GB storage free.
+- **Cloud Functions**: 2M invocations/month free.
+- **Cloud Storage**: 5 GB/month free (US regions).
+- **BigQuery**: 1 TB query & 10 GB storage/month free.
+- **Firestore**: 50,000 reads/writes & 1 GB storage free.
 
 **Tips to Avoid Charges:**
 
-* Always select **free tier-eligible regions**.
-* Delete unused resources.
-* Enable **Budgets & Alerts** in **Billing → Budgets & alerts**.
+- Always select **free tier-eligible regions**.
+- Delete unused resources.
+- Enable **Budgets & Alerts** in **Billing → Budgets & alerts**.
 
 ---
 
 ### AWS Free Tier Highlights
 
-* **AWS Lambda**: 1M requests/month free + 400,000 GB-seconds compute.
-* **Amazon S3**: 5 GB standard storage free.
-* **Amazon EC2**: 750 hours/month for `t2.micro`/`t3.micro` (12 months only).
-* **DynamoDB**: 25 GB storage & 25M reads/writes/month free.
-* **Step Functions**: 4,000 state transitions/month free.
+- **AWS Lambda**: 1M requests/month free + 400,000 GB-seconds compute.
+- **Amazon S3**: 5 GB standard storage free.
+- **Amazon EC2**: 750 hours/month for `t2.micro`/`t3.micro` (12 months only).
+- **DynamoDB**: 25 GB storage & 25M reads/writes/month free.
+- **Step Functions**: 4,000 state transitions/month free.
 
 **Tips to Avoid Charges:**
 
-* Use **AWS Budgets** to alert at $1 spend.
-* Prefer **Roles** over IAM users with keys for AWS services.
-* Delete EC2, RDS, or S3 buckets when not in use.
-* Stay within **free tier quotas** — check the [AWS Free Tier Dashboard](https://console.aws.amazon.com/billing/home?#/freetier).
+- Use **AWS Budgets** to alert at $1 spend.
+- Prefer **Roles** over IAM users with keys for AWS services.
+- Delete EC2, RDS, or S3 buckets when not in use.
+- Stay within **free tier quotas** — check the [AWS Free Tier Dashboard](https://console.aws.amazon.com/billing/home?#/freetier).
 
 ---
 
@@ -135,8 +135,8 @@ This creates a dedicated IAM user that Terraform will use to deploy AWS resource
 3. **User name**: `terraform-deployer` (or similar).
 4. **Access type**: Uncheck console access (Terraform doesn't need to log in to the console).
 5. Click **Next** and attach permissions:
-   * Option 1 (simple): Attach the AWS managed policy **AdministratorAccess** *(not recommended for production)*.
-   * Option 2 (secure): Attach only the specific policies Terraform needs (e.g., `AmazonS3FullAccess`, `AmazonEC2FullAccess`).
+   - Option 1 (simple): Attach the AWS managed policy **AdministratorAccess** _(not recommended for production)_.
+   - Option 2 (secure): Attach only the specific policies Terraform needs (e.g., `AmazonS3FullAccess`, `AmazonEC2FullAccess`).
 6. Click **Next → Create user**.
 
 ---
@@ -147,8 +147,8 @@ This creates a dedicated IAM user that Terraform will use to deploy AWS resource
 2. Under **Access keys**, click **Create access key**.
 3. Select **Command Line Interface (CLI)** as the use case.
 4. Download the `.csv` file containing:
-   * `AWS_ACCESS_KEY_ID`
-   * `AWS_SECRET_ACCESS_KEY`
+   - `AWS_ACCESS_KEY_ID`
+   - `AWS_SECRET_ACCESS_KEY`
 
 ---
 
@@ -185,10 +185,7 @@ For AWS:
     {
       "Sid": "AthenaGlueAccess",
       "Effect": "Allow",
-      "Action": [
-        "athena:*",
-        "glue:*"
-      ],
+      "Action": ["athena:*", "glue:*"],
       "Resource": "*"
     }
   ]
@@ -201,7 +198,7 @@ The next step is to connect our provider with the lcoal machine, In GCP we expor
 
 ## AWS Credentials for Terraform
 
-Terraform needs AWS credentials to deploy resources.  
+Terraform needs AWS credentials to deploy resources.
 In AWS, this is done using an **IAM user’s Access Key ID** and **Secret Access Key**.
 
 ---
@@ -214,9 +211,9 @@ In AWS, this is done using an **IAM user’s Access Key ID** and **Secret Access
 4. Scroll to **Access keys** → **Create access key**.
 5. Choose **Application running outside AWS**.
 6. Copy or download the:
-   * `AWS_ACCESS_KEY_ID`
-   * `AWS_SECRET_ACCESS_KEY`
-   > ⚠️ The secret key is shown only once — download the `.csv` or save it securely.
+   - `AWS_ACCESS_KEY_ID`
+   - `AWS_SECRET_ACCESS_KEY`
+     > ⚠️ The secret key is shown only once — download the `.csv` or save it securely.
 
 ---
 
@@ -272,25 +269,25 @@ provider "aws" {
 
 ### GCP vs AWS: Project / Account Mapping
 
-* **GCP**
+- **GCP**
 
-  * All resources live inside a **Project** (identified by `project_id`).  
-  * The project defines **billing, IAM roles, and resource boundaries**.  
+  - All resources live inside a **Project** (identified by `project_id`).
+  - The project defines **billing, IAM roles, and resource boundaries**.
 
-* **AWS**  
-  * All resources live inside an **Account** (identified by a 12-digit `account_id`).  
-  * AWS doesn’t have a "project" object — the **account** is the main boundary for billing, IAM, and resources.  
-  * Resources are additionally scoped by **Region** (e.g., `eu-north-1`).  
-  * Terraform usually references a **profile** (from `~/.aws/config`) that contains credentials tied to that account.  
+- **AWS**
+  - All resources live inside an **Account** (identified by a 12-digit `account_id`).
+  - AWS doesn’t have a "project" object — the **account** is the main boundary for billing, IAM, and resources.
+  - Resources are additionally scoped by **Region** (e.g., `eu-north-1`).
+  - Terraform usually references a **profile** (from `~/.aws/config`) that contains credentials tied to that account.
 
-✅ In practice:  
+✅ In practice:
 
-* **GCP `project_id` ≈ AWS `account_id`**  
-* **GCP region/zone ≈ AWS region**
+- **GCP `project_id` ≈ AWS `account_id`**
+- **GCP region/zone ≈ AWS region**
 
 ### Terraform init
 
-This will read the providers information and create a set of extra files and folders such as the ```lock.hcl``` and the terraform subfolder will the provider hash. 
+This will read the providers information and create a set of extra files and folders such as the `lock.hcl` and the terraform subfolder will the provider hash.
 
 ### Adding a Bucket
 
@@ -372,4 +369,3 @@ resource "aws_athena_database" "dataset" {
   bucket = aws_s3_bucket.data_lake_bucket.bucket
 }
 ```
-

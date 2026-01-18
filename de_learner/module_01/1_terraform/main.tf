@@ -9,20 +9,20 @@ terraform {
 }
 
 provider "aws" {
-  region  = "eu-north-1"   # Change to your preferred region
-  profile = "terraform"    # Must match your AWS SSO profile
+  region  = var.aws_region
+  profile = var.aws_profile
 }
 
 # ------------------------
 # S3 Bucket
 # ------------------------
 resource "aws_s3_bucket" "data_lake_bucket" {
-  bucket = "data-lake-dev-milokmilo"  # Must be globally unique
+  bucket        = var.bucket_name
   force_destroy = true  # Allows bucket deletion even if objects exist
 
   tags = {
-    Environment = "dev"
-    Project     = "de-learner"
+    Environment = var.environment
+    Project     = var.project_name
   }
 }
 
@@ -50,11 +50,11 @@ resource "aws_s3_bucket_lifecycle_configuration" "data_lake_bucket_lifecycle" {
     filter {}  # Applies to all objects
 
     expiration {
-      days = 30
+      days = var.lifecycle_expiration_days
     }
 
     noncurrent_version_expiration {
-      noncurrent_days = 30
+      noncurrent_days = var.lifecycle_expiration_days
     }
 
     abort_incomplete_multipart_upload {
@@ -67,6 +67,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "data_lake_bucket_lifecycle" {
 # Athena database (BigQuery dataset equivalent)
 # ---------------------------
 resource "aws_athena_database" "dataset" {
-  name   = "demo_dataset"
+  name   = var.athena_database_name
   bucket = aws_s3_bucket.data_lake_bucket.bucket
 }

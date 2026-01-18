@@ -7,13 +7,11 @@ authors = [
 ]
 readme = "README.md"
 keywords = ['python']
-requires-python = ">=3.10,<4.0"
+requires-python = ">=3.12,<4.0"
 classifiers = [
   "Intended Audience :: Developers",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Topic :: Software Development :: Libraries :: Python Modules",
@@ -24,7 +22,7 @@ dependencies = [
     "pandas>=2.3.1",
     "pandas-stubs>=2.3.0.250703",
     "pgcli>=4.3.0",
-    "psycopg2>=2.9.10",
+    "psycopg2-binary>=2.9.10",
     "pyarrow>=21.0.0",
     "requests>=2.32.4",
     "sqlalchemy>=2.0.41",
@@ -61,6 +59,10 @@ py-modules = ["de_learner"]
 
 [tool.mypy]
 files = ["de_learner"]
+exclude = [
+    "de_learner/module_01/1_terraform",
+    "de_learner/module_01/2_docker_sql",
+]
 disallow_untyped_defs = true
 disallow_any_unimported = true
 no_implicit_optional = true
@@ -75,7 +77,7 @@ ignore_missing_imports = true
 testpaths = ["tests"]
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py312"
 line-length = 120
 fix = true
 
@@ -141,3 +143,7 @@ skip_empty = true
 
 branch = true
 source = ["de_learner"]
+
+[tool.deptry]
+extend_exclude = ["de_learner/module_01"]
+ignore = ["DEP002"]  # Ignore dependencies defined but not used (educational examples)

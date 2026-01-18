@@ -3,9 +3,9 @@
 It is possible just to use a Docker image with Postgres on the bat.
 For the docker some things are needed, such as:
 
-* USER
-* PASSWORD
-* DB
+- USER
+- PASSWORD
+- DB
 
 The previous environmental variables need to be pass in the Docker image.
 
@@ -31,15 +31,15 @@ It is a python library that allos to view and manipoulate the date in the PostGr
 uv run pgcli postgresql://root:root@localhost:5432/ny_taxi
 ```
 
-At this point the tables are empty and the command ```\dt``` will return nothing.
+At this point the tables are empty and the command `\dt` will return nothing.
 
 ### How to put the data in PostGres
 
-* Create a script that reads the dataframe.
-* Generate the schema, which is a collection of the columns and the Dtype, for example  in pandas -> ```pd.io.sql.get_schema(df, table_name)```.
-* We need to generate the DDL statement (Data Definition Language) to make Postgres understand how the data looks like.
-* SqlAlchemy: Needed to create the engine:
-  
+- Create a script that reads the dataframe.
+- Generate the schema, which is a collection of the columns and the Dtype, for example in pandas -> `pd.io.sql.get_schema(df, table_name)`.
+- We need to generate the DDL statement (Data Definition Language) to make Postgres understand how the data looks like.
+- SqlAlchemy: Needed to create the engine:
+
   ```python
   from sqlalchemy import create_engine
 
@@ -50,31 +50,31 @@ At this point the tables are empty and the command ```\dt``` will return nothing
   print(pd.io.sql.get_schema(df, table_name, con=engine)
   ```
 
-* It is important to chunk the df or parquet to insert the data in batches, e.g., chunksize=100000
-* __Note:__ The iterator in pandas only works for csv data, not parquet.
-* It is a good practice to initially create the table, and introduce the column names to evlauate the connection and the schema:
-  
+- It is important to chunk the df or parquet to insert the data in batches, e.g., chunksize=100000
+- **Note:** The iterator in pandas only works for csv data, not parquet.
+- It is a good practice to initially create the table, and introduce the column names to evlauate the connection and the schema:
+
   ```python
   df.to_sql(name='yellow_taxi_data', con=engine, if_exists='replace')
   ```
 
 #### Follow these steps
 
-* In order to run the process properly, it is necessary:
+- In order to run the process properly, it is necessary:
 
-    1. Open Docker.
-    2. Run the Postgres Image. So is active and ready to accept data.
-    3. Run the script, sometimes psycogpg2 needs to be installed beforehand.
-    4. Evaluate the process by ```\dt```, this will retrieve the tables created.
-    5. in PGCLI: ```SELECT * FROM yellow_taxi_data LIMIT 10;``` to observe a set of the table
-    6. in PGCLI: ```\d ny_taxi_data``` to describe the data.
+  1. Open Docker.
+  2. Run the Postgres Image. So is active and ready to accept data.
+  3. Run the script, sometimes psycogpg2 needs to be installed beforehand.
+  4. Evaluate the process by `\dt`, this will retrieve the tables created.
+  5. in PGCLI: `SELECT * FROM yellow_taxi_data LIMIT 10;` to observe a set of the table
+  6. in PGCLI: `\d ny_taxi_data` to describe the data.
 
 ### Connecting PgAdmin and PostGres
 
 PgCLI is mainly used to have a quick view of the data. The command line environment sometimes can be difficult. Hence, pgAdmin is used.
 
-* pdAdmin: It is a web-based GUI tool used to interact with the postgres Database.
-* It can be installed locally or via docker ```docker pull dpage/pgadmin4:snapshot```
+- pdAdmin: It is a web-based GUI tool used to interact with the postgres Database.
+- It can be installed locally or via docker `docker pull dpage/pgadmin4:snapshot`
 
 To run it via docker:
 
@@ -86,14 +86,14 @@ docker run -it \
     dpage/pgadmin4:snapshot
 ```
 
-It is important to remember that if running from the container, the localhost indicates the port in the container and not your machine. To connect with the local network we need to bridge them using __docker networks__.
+It is important to remember that if running from the container, the localhost indicates the port in the container and not your machine. To connect with the local network we need to bridge them using **docker networks**.
 
 ### Docker Networks
 
 It is a way to connect containers inside the same "hood". Making possible to tunnel ports between containers for data transfer and communication.
 
-1. To create a network: ```docker network create <name>```
-2. Add the ```--network=<name>``` abd the name ```--name=<name>``` which will be the way in how pgAdmin finds the network.
+1. To create a network: `docker network create <name>`
+2. Add the `--network=<name>` abd the name `--name=<name>` which will be the way in how pgAdmin finds the network.
 
 ```bash
 docker network create pg-network
@@ -117,7 +117,7 @@ If the script is in a Jupiter notebook it is possible to:
 jupyter nbconvert --to=script
 ```
 
-However for the script __ingest_data.py__ we can use either argparse or typer to create the input fields necessary for the script to run.
+However for the script **ingest_data.py** we can use either argparse or typer to create the input fields necessary for the script to run.
 
 Based on the structure of the project:
 
@@ -169,7 +169,7 @@ A way to make things run easier is to move those containers into a single file a
 > DockerCompose: Is a tool for defining and running multi-containers. Using YAML file to configure the application's services.
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   pgdatabase:
@@ -201,14 +201,12 @@ services:
 
 networks:
   pg-network:
-  ```
-
-  To run the yaml in a detach mode abnd shutting it down:
-
-  ```bash
-  docker-compose up -d
-
-  docker-compose down
 ```
 
+To run the yaml in a detach mode abnd shutting it down:
 
+```bash
+docker-compose up -d
+
+docker-compose down
+```
