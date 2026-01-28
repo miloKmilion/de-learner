@@ -145,3 +145,9 @@ data/
 *.csv
 *.json
 *.xlsx
+
+# Development config files
+.github/
+.clinerules
+.editorconfig
+.devcontainer/
