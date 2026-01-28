@@ -1,74 +1,152 @@
 # de-learner
 
-[![Release](https://img.shields.io/github/v/release/miloKmilion/de-learner)](https://img.shields.io/github/v/release/miloKmilion/de-learner)
 [![Build status](https://img.shields.io/github/actions/workflow/status/miloKmilion/de-learner/main.yml?branch=main)](https://github.com/miloKmilion/de-learner/actions/workflows/main.yml?query=branch%3Amain)
-[![codecov](https://codecov.io/gh/miloKmilion/de-learner/branch/main/graph/badge.svg)](https://codecov.io/gh/miloKmilion/de-learner)
 [![Commit activity](https://img.shields.io/github/commit-activity/m/miloKmilion/de-learner)](https://img.shields.io/github/commit-activity/m/miloKmilion/de-learner)
 [![License](https://img.shields.io/github/license/miloKmilion/de-learner)](https://img.shields.io/github/license/miloKmilion/de-learner)
 
-This is a template repository for Python projects that use uv for their dependency management.
+A hands-on Data Engineering learning repository featuring practical exercises, real-world data pipelines, and infrastructure-as-code implementations.
 
 - **Github repository**: <https://github.com/miloKmilion/de-learner/>
 - **Documentation** <https://miloKmilion.github.io/de-learner/>
 
-## Getting started with your project
+## What You'll Learn
 
-### 1. Create a New Repository
+This repository contains modular learning content covering essential Data Engineering concepts and tools:
 
-First, create a repository on GitHub with the same name as this project, and then run the following commands:
+### Module 01: Data Engineering Fundamentals
+
+#### 1. Docker Basics
+
+- Container fundamentals and why Docker matters for DE
+- Writing Dockerfiles and building images
+- Docker Compose for multi-container orchestration
+- Integration with modern Python tooling (UV package manager)
+
+#### 2. Infrastructure as Code with Terraform
+
+- IaC fundamentals and workflow (init, plan, apply, destroy)
+- AWS cloud infrastructure provisioning
+- S3 buckets, versioning, and lifecycle rules
+- Athena database setup for querying data lakes
+- Service account management and security best practices
+
+#### 3. Data Ingestion Pipelines
+
+- Building production-grade data ingestion scripts
+- PostgreSQL database setup with Docker
+- Batch processing and chunking strategies
+- SQLAlchemy for database connectivity
+- Working with Parquet and CSV formats
+- Retry logic and error handling
+
+#### Homework: NYC Taxi Data Analysis
+
+Complete hands-on exercises using real NYC taxi trip data:
+
+- Data ingestion from remote sources
+- SQL queries for analytics (trip analysis, revenue calculations, zone lookups)
+- Multi-table joins and aggregations
+- Automated pipeline execution with bash scripts
+
+## Technologies & Tools
+
+- **Languages**: Python 3.12+, SQL, HCL (Terraform), Bash
+- **Containerization**: Docker, Docker Compose
+- **Infrastructure**: Terraform, AWS (S3, Athena, IAM)
+- **Databases**: PostgreSQL, pgAdmin, pgCLI
+- **Data Processing**: pandas, PyArrow, SQLAlchemy
+- **Package Management**: UV
+- **Development**: pytest, ruff, mypy, pre-commit hooks
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.12 or higher
+- Docker and Docker Compose
+- UV package manager
+- Make (optional, for convenience commands)
+
+### Setup Development Environment
+
+1. Clone the repository:
 
 ```bash
-git init -b main
-git add .
-git commit -m "init commit"
-git remote add origin git@github.com:miloKmilion/de-learner.git
-git push -u origin main
+git clone https://github.com/miloKmilion/de-learner.git
+cd de-learner
 ```
 
-### 2. Set Up Your Development Environment
-
-Then, install the environment and the pre-commit hooks with
-
+1. Install dependencies and pre-commit hooks:
 ```bash
 make install
 ```
 
-This will also generate your `uv.lock` file
+This will set up your virtual environment, install all dependencies, and configure pre-commit hooks for code quality.
 
-### 3. Run the pre-commit hooks
+### Running Module 01
 
-Initially, the CI/CD pipeline might be failing due to formatting issues. To resolve those run:
+#### Docker Basics
+
+Follow along with [1_docker_basics.md](de_learner/module_01/1_docker_basics.md) to learn container fundamentals.
+
+#### Terraform
+
+See [terraform.md](de_learner/module_01/1_terraform/terraform.md) for IaC setup and AWS provisioning.
+
+#### Data Ingestion
+
+Work through [2_ingesting_data.md](de_learner/module_01/2_ingesting_data.md) and run:
 
 ```bash
-uv run pre-commit run -a
+cd de_learner/module_01/2_docker_sql
+docker-compose up -d
+python ingest_data.py
 ```
 
-### 4. Commit the changes
+#### Homework
 
-Lastly, commit the changes made by the two steps above to your repository.
+Run the complete Module 01 homework automatically:
 
 ```bash
-git add .
-git commit -m 'Fix formatting issues'
-git push origin main
+cd de_learner/module_01/homework
+./run_homework.sh
 ```
 
-You are now ready to start development on your project!
-The CI/CD pipeline will be triggered when you open a pull request, merge to main, or when you create a new release.
+Or run individual questions manually after starting the Docker services.
 
-To finalize the set-up for publishing to PyPI, see [here](https://shaneholloman.github.io/uvi/features/publishing/#set-up-for-pypi).
-For activating the automatic documentation with MkDocs, see [here](https://shaneholloman.github.io/uvi/features/mkdocs/#enabling-the-documentation-on-github).
-To enable the code coverage reports, see [here](https://shaneholloman.github.io/uvi/features/codecov/).
+## Project Structure
 
-## Releasing a new version
+```text
+de-learner/
+├── de_learner/
+│   └── module_01/           # Module 01: Data Engineering Fundamentals
+│       ├── 1_docker_basics.md
+│       ├── 1_terraform/     # Terraform configurations and docs
+│       ├── 2_docker_sql/    # Data ingestion pipeline
+│       └── homework/        # NYC taxi data analysis exercises
+├── tests/                   # Unit tests
+├── docs/                    # MkDocs documentation
+└── pyproject.toml          # Project configuration and dependencies
+```
 
-- Create an API Token on [PyPI](https://pypi.org/).
-- Add the API Token to your projects secrets with the name `PYPI_TOKEN` by visiting [this page](https://github.com/miloKmilion/de-learner/settings/secrets/actions/new).
-- Create a [new release](https://github.com/miloKmilion/de-learner/releases/new) on Github.
-- Create a new tag in the form `*.*.*`.
+## Development Commands
 
-For more details, see [here](https://shaneholloman.github.io/uvi/features/cicd/#how-to-trigger-a-release).
+```bash
+make install    # Install dependencies and pre-commit hooks
+make check      # Run code quality checks (ruff, mypy)
+make test       # Run tests with coverage
+make docs       # Build and serve documentation locally
+```
 
----
+## Contributing
 
-Repository initiated with [shaneholloman/uvi](https://github.com/shaneholloman/uvi).
+This is a personal learning repository, but feel free to:
+
+- Open issues for questions or suggestions
+- Submit PRs for fixes or improvements
+- Fork the repo for your own learning journey
+
+## Resources & Attribution
+
+- Repository structure based on [shaneholloman/uvi](https://github.com/shaneholloman/uvi)
+- NYC taxi data from [NYC Taxi & Limousine Commission](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
